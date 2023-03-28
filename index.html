@@ -1,30 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Management</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="header">
-        <h5>Products</h5>
-    </div>
-    <div class="top-section">
-        <div class="top-left-section">
-            <button id="addProduct"><i class="fa-regular fa-plus"></i>Add Product</button>
-            <button id="clearFilter"><i class="fa-solid fa-trash"></i>Clear Filtering</button>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container vh-100 vw-100">
+      <div class="container mt-5 bg-body-tertiary p-3">
+        <h3 class="text-center">Product Details</h3>
+        <form id="productForm">
+          <div class="row mt-5">
+            <div class="form-group col-md-6 mb-3">
+              <label for="productName">Name</label>
+              <input
+                type="text"
+                id="productName"
+                name="name"
+                class="form-control"
+                placeholder="Enter Product Name Here"
+              />
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="productDescription">Description</label>
+              <textarea
+                name="description"
+                id="productDescription"
+                class="form-control"
+                placeholder="Enter Product Description Here"
+                cols="30"
+                rows="1"
+              ></textarea>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="productPrice">Price</label>
+              <input
+                type="number"
+                name="price"
+                id="productPrice"
+                class="form-control"
+                placeholder="Enter Product Price Here"
+                min="1"
+              />
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="productPrice">Image</label>
+              <input
+                type="file"
+                name="photo"
+                id="productPhoto"
+                class="form-control"
+              />
+            </div>
+            <div class="col-lg-12 mt-2 text-center">
+              <button class="btn btn-primary me-3" id="submitBtn">
+                Add Product
+              </button>
+              <button class="btn btn-primary" id="resetBtn">Reset Data</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="container mt-3 bg-body-tertiary p-3">
+        <h3 class="">Product List</h3>
+        <div class="row mt-3">
+          <div class="col-12 bg-body-tertiary">
+            <table class="table text-center">
+              <thead>
+                <tr>
+                  <th>Sr.No</th>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="product-list"></tbody>
+            </table>
+          </div>
         </div>
-        <div class="top-right-section">
-            <i class="fa fa-search"></i>
-            <input type="search" id="search">
-            <input type="search" id="search">
-            <button>search</button>
-        </div>
+      </div>
     </div>
-
-</body>
+    <script src="./script.js"></script>
+  </body>
 </html>
