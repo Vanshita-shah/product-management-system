@@ -9,10 +9,11 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+/* 
 body{
   overflow: hidden;
-}
+} */
+
 button{
     border: none !important;   
     cursor: pointer;
@@ -24,7 +25,9 @@ input{
     border: none;
 }
 
-
+th{
+  cursor: pointer;
+}
 .header {
   width: 100%;
   padding: 10px 30px;
@@ -94,4 +97,8 @@ tbody {
   display:block;
   height:200px;
   overflow:auto;
+}
+
+.feature-btn:hover{
+  color: var(--primary_color);
 }
