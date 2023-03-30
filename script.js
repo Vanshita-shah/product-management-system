@@ -7,12 +7,27 @@ const submitBtn = document.getElementById("submitBtn");
 const products = document.getElementById("product-list");
 const productPhoto = document.getElementById("productPhoto");
 const searchBar = document.getElementById("search");
-let imgUrl;
+let imgUrl = "";
 let productList = [];
 
 if (localStorage.getItem("productList") != null) {
   productList = JSON.parse(localStorage.getItem("productList"));
 }
+
+productPhoto.addEventListener("change", (e) => {
+  if (productPhoto.files[0].size < 1000000) {
+    let fReader = new FileReader();
+    fReader.onload = (e) => {
+      imgUrl = e.target.result;
+    };
+    fReader.readAsDataURL(productPhoto.files[0]);
+  } else {
+    console.log("File size too long");
+  }
+  const img = URL.createObjectURL(e.target.files[0]);
+  const imgPreview = document.getElementById("imgPreview");
+  imgPreview.src = img;
+});
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -22,12 +37,13 @@ form.addEventListener("submit", (e) => {
     name: prdName.value,
     desc: description.value,
     price: prdPrice.value,
-    image: imgUrl == undefined ? "./images/img-2.png" : imgUrl,
+    image: imgUrl === "" ? "./images/img-2.png" : imgUrl,
   });
   localStorage.setItem("productList", JSON.stringify(productList));
   swal("Product Uploaded!", "", "success");
   form.reset();
   getDataFromLocal();
+  imgUrl = "";
 });
 
 resetBtn.addEventListener("click", (e) => {
@@ -35,23 +51,10 @@ resetBtn.addEventListener("click", (e) => {
   form.reset();
 });
 
-productPhoto.addEventListener("change", (e) => {
-  if (productPhoto.files[0].size < 1000000) {
-    var fReader = new FileReader();
-    fReader.onload = (e) => {
-      imgUrl = e.target.result;
-    };
-    fReader.readAsDataURL(productPhoto.files[0]);
-  } else {
-    console.log("File size too long");
-  }
-});
-
 const getDataFromLocal = () => {
   let html = "";
   productList.forEach((data, index) => {
     html += `<tr index="${index}">\
-    <td>${index + 1}</td>\
     <td>${data.id}</td>\
     <td>\
       <img\
@@ -64,13 +67,12 @@ const getDataFromLocal = () => {
     </td>\
     <td>${data.name}</td>\
     <td>${data.price}</td>\
-    <td class="text-center">\
-      <button class="btn btn-white feature-btn">\
-        <i class="fa-solid fa-eye feature-btn"></i>\
-      </button>\
-      <button class="btn btn-white feature-btn">\
-        <i class="fa-solid fa-pen-to-square"></i>\
-      </button>\
+    <td>\
+    <a href="./view-edit.html?ProductID=${data.id}">
+    <button class="btn btn-white edit-btn feature-btn">\
+       <i class="fa-solid fa-pen-to-square"></i>\
+     </button>\
+    </a>
       <button class="btn btn-white del-btn feature-btn">\
         <i class="fa-solid fa-trash"></i>\
       </button>\
@@ -82,6 +84,7 @@ const getDataFromLocal = () => {
   // delete code
   let btn;
   const allDelBtns = document.querySelectorAll(".del-btn");
+  console.log(allDelBtns);
   for (btn of allDelBtns) {
     btn.addEventListener("click", (e) => {
       const productRow = e.target.parentElement.parentElement;
@@ -110,9 +113,12 @@ window.onload = getDataFromLocal();
 //debouncing for search filter
 function searchBarHandler() {
   let tr = products.querySelectorAll("tr");
+  console.log(tr);
   let searchVal = searchBar.value.toLowerCase();
+  console.log(searchVal);
   for (let row of tr) {
-    let td = row.getElementsByTagName("TD")[1];
+    let td = row.getElementsByTagName("TD")[0];
+    console.log(td);
     if (td.innerHTML.toLowerCase().indexOf(searchVal) > -1) {
       row.style.display = "";
     } else {
@@ -137,7 +143,7 @@ searchBar.addEventListener("input", debounce(searchBarHandler, 300));
 function sortByID() {
   console.log(productList);
   productList.sort((a, b) => {
-    return a.id > b.id ? 1 : -1;
+    return Number(a.id) > Number(b.id) ? 1 : -1;
   });
   getDataFromLocal();
 }
@@ -150,7 +156,7 @@ function sortByName() {
 function sortByPrice() {
   console.log("here");
   productList.sort((a, b) => {
-    return a.price > b.price ? 1 : -1;
+    return Number(a.price) > Number(b.price) ? 1 : -1;
   });
   console.log(productList);
   getDataFromLocal();
