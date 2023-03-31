@@ -29,7 +29,7 @@
     <div class="container vh-100 vw-100">
       <div class="container mt-5 bg-body-tertiary p-3">
         <h3 class="text-center">Product Details</h3>
-        <form id="productForm">
+        <form id="productForm" autocomplete="off">
           <div class="row mt-5">
             <div class="form-group col-md-6 mb-3">
               <label for="productName">Name<span>*</span></label>
@@ -101,6 +101,7 @@
               name="search"
               id="search"
               placeholder="Search by Product ID"
+              autocomplete="off"
             />
             <i
               class="fa-solid fa-magnifying-glass bg-white"
@@ -108,21 +109,21 @@
             ></i>
           </div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3 container">
           <div class="col-12 bg-body-tertiary">
             <table class="table text-center">
               <thead>
                 <tr>
                   <th>
-                    ID <i class="fa-solid fa-sort" onclick="sortByID()"></i>
+                    ID &#9650; <i class="fa-solid fa-sort" data-column="id" data-order="desc"></i>
                   </th>
                   <th>Image</th>
                   <th>
-                    Name <i class="fa-solid fa-sort" onclick="sortByName()"></i>
+                    Name &#9650; <i class="fa-solid fa-sort" data-column="name" data-order="desc"></i>
                   </th>
                   <th>
-                    Price
-                    <i class="fa-solid fa-sort" onclick="sortByPrice()"></i>
+                    Price &#9650;
+                    <i class="fa-solid fa-sort" data-column="price" data-order="desc" ></i>
                   </th>
                   <th>Action</th>
                 </tr>
@@ -136,3 +137,4 @@
     <script src="./script.js"></script>
   </body>
 </html>
+  

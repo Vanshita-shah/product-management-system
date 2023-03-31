@@ -5,6 +5,7 @@ const image = document.getElementById("productPhoto");
 const imagePreview = document.getElementById("imgPreview");
 const editBtn = document.getElementById("editBtn");
 const updateBtn = document.getElementById("updateBtn");
+const backBtn = document.getElementById("backBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const photoUpload = document.getElementById("photoUpload");
 const productPhoto = document.getElementById("productPhoto");
@@ -25,14 +26,23 @@ description.value = productData[0].desc;
 price.value = productData[0].price;
 imagePreview.src = productData[0].image;
 
+backBtn.parentElement.href="./index.html"
 editBtn.addEventListener("click", () => {
   const formFields = document.querySelectorAll("input,textarea");
   for (field of formFields) field.removeAttribute("readonly");
   photoUpload.classList.remove("d-none");
   updateBtn.classList.remove("d-none");
   editBtn.classList.add("d-none");
+  backBtn.addEventListener("click",()=>{
+    backBtn.parentElement.href="";
+    const formFields = document.querySelectorAll("input,textarea");
+    for (field of formFields) field.readOnly = true;
+    photoUpload.classList.add("d-none");
+    updateBtn.classList.add("d-none");
+    editBtn.classList.remove("d-none");
+    imagePreview.src = productData[0].image;
+  })
 });
-
 cancelBtn.addEventListener("click", () => {
   const formFields = document.querySelectorAll("input,textarea");
   for (field of formFields) field.readOnly = true;
@@ -40,6 +50,9 @@ cancelBtn.addEventListener("click", () => {
   updateBtn.classList.add("d-none");
   editBtn.classList.remove("d-none");
   imagePreview.src = productData[0].image;
+  backBtn.addEventListener("click",()=>{
+    backBtn.parentElement.href="./index.html"
+  })
 });
 
 productPhoto.addEventListener("change", (e) => {
@@ -67,4 +80,5 @@ updateBtn.addEventListener("click", () => {
   productList[index].price = price.value;
   productList[index].image = imgUrl;
   localStorage.setItem("productList", JSON.stringify(productList));
+  swal("Product Details Updated!", "", "success");
 });

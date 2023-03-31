@@ -140,6 +140,36 @@ function debounce(func, delay) {
 searchBar.addEventListener("input", debounce(searchBarHandler, 300));
 
 //sorting
+const sortFeilds=document.querySelectorAll("th i");
+console.log(sortFeilds);
+sortFeilds.forEach(feild=>{
+  feild.addEventListener("click",(e)=>{
+    let column=feild.getAttribute('data-column');
+    let order=feild.getAttribute('data-order');
+    if(order==="desc"){
+      feild.setAttribute("data-order","asc");
+      productList.sort((a, b) => {
+        if(column==="name")
+        return a[column] > b[column] ? 1 : -1;
+        else
+        return Number(a[column]) > Number(b[column]) ? 1 : -1;
+        
+      });
+      getDataFromLocal();
+      console.log(feild.getAttribute("data-order"));
+    }else{
+      feild.setAttribute("data-order","desc");
+      productList.sort((a, b) => {
+        if(column==="name")
+        return a[column] < b[column] ? 1 : -1;
+        else
+        return Number(a[column]) < Number(b[column]) ? 1 : -1;
+      });
+      getDataFromLocal();
+    }
+  })
+})
+
 function sortByID() {
   console.log(productList);
   productList.sort((a, b) => {
@@ -176,20 +206,3 @@ function sortByPrice() {
 //   return true;
 // }
 
-// function showData() {
-//   var products;
-//   if (localStorage.getitem("products") == null) {
-//     products = [];
-//   } else {
-//     products = JSON.parse(localStorage.getItem("products"));
-//   }
-
-//   var html = "";
-
-//   products.forEach((element, index) => {
-//     html += "<tr>";
-//     html += "<td>" + element.name + "</td>";
-//     html += "<td>" + element.name + "</td>";
-//     html += "<td>" + element.name + "</td>";
-//   });
-// }
