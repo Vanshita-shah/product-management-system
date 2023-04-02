@@ -47,23 +47,6 @@ form.addEventListener("submit", (e) => {
   
 });
 
-// function isValidate() {
-//   if (prdName.value == "" || prdName.value.trim() == "") {
-//     console.log("here");
-//     return false;
-//   } else if (!prdName.value.match(/^[A-Za-z_][ A-Za-z0-9_/()-]*$/)) {
-//     alert("Name should not contain any such characters");
-//     return false;
-//   }
-
-//   if (prdPrice.value.match(/[e]/)) {
-//     alert("please enter valid price");
-//     return false;
-//   }
-
-//   return true;
-// }
-
 resetBtn.addEventListener("click", (e) => {
   e.preventDefault();
   form.reset("");
@@ -103,7 +86,6 @@ const getDataFromLocal = () => {
   // delete code
   let btn;
   const allDelBtns = document.querySelectorAll(".del-btn");
-  console.log(allDelBtns);
   for (btn of allDelBtns) {
     btn.addEventListener("click", (e) => {
       const productRow = e.target.parentElement.parentElement;
@@ -132,12 +114,9 @@ window.onload = getDataFromLocal();
 //debouncing for search filter
 function searchBarHandler() {
   let tr = products.querySelectorAll("tr");
-  console.log(tr);
   let searchVal = searchBar.value.toLowerCase();
-  console.log(searchVal);
   for (let row of tr) {
     let td = row.getElementsByTagName("TD")[0];
-    console.log(td);
     if (td.innerHTML.toLowerCase().indexOf(searchVal) > -1) {
       row.style.display = "";
     } else {
@@ -150,7 +129,6 @@ function debounce(func, delay) {
   return function () {
     clearTimeout(timeId);
     timeId = setTimeout(() => {
-      console.log("abc");
       func();
     }, delay);
   };
@@ -160,7 +138,6 @@ searchBar.addEventListener("input", debounce(searchBarHandler, 300));
 
 //sorting
 const sortFeilds = document.querySelectorAll("th i");
-console.log(sortFeilds);
 sortFeilds.forEach((feild) => {
   feild.addEventListener("click", (e) => {
     let column = feild.getAttribute("data-column");
@@ -173,7 +150,6 @@ sortFeilds.forEach((feild) => {
         else return Number(a[column]) > Number(b[column]) ? 1 : -1;
       });
       getDataFromLocal();
-      console.log(feild.getAttribute("data-order"));
     } else {
       feild.setAttribute("data-order", "desc");
       productList.sort((a, b) => {

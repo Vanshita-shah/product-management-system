@@ -2,7 +2,6 @@ import isValid from "./validation.js";
 const prdName = document.getElementById("productName");
 const description = document.getElementById("productDescription");
 const price = document.getElementById("productPrice");
-const image = document.getElementById("productPhoto");
 const imagePreview = document.getElementById("imgPreview");
 const editBtn = document.getElementById("editBtn");
 const updateBtn = document.getElementById("updateBtn");
@@ -10,7 +9,7 @@ const backBtn = document.getElementById("backBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const photoUpload = document.getElementById("photoUpload");
 const productPhoto = document.getElementById("productPhoto");
-const heading = document.querySelector("h2");
+const heading = document.querySelector("h3");
 let productList = [];
 
 if (localStorage.getItem("productList") != null) {
@@ -21,7 +20,6 @@ const productID = new URLSearchParams(window.location.search).get("ProductID");
 const productData = productList.filter((product) => {
   return product.id == productID;
 });
-console.log(productData[0]);
 prdName.value = productData[0].name;
 description.value = productData[0].desc;
 price.value = productData[0].price;
@@ -32,26 +30,18 @@ editBtn.addEventListener("click", () => {
   heading.innerHTML = "Update Product";
   const formFields = document.querySelectorAll("input,textarea");
   for (let field of formFields) field.removeAttribute("readonly");
-  photoUpload.classList.remove("invisible");
-  updateBtn.classList.remove("d-none");
-  cancelBtn.classList.remove("d-none");
-  editBtn.classList.add("d-none");
-  backBtn.classList.add("d-none");
+  allBtnHandler();
 });
 
 cancelBtn.addEventListener("click", () => {
   const formFields = document.querySelectorAll("input,textarea");
   for (let field of formFields) field.readOnly = true;
-  photoUpload.classList.add("invisible");
-  updateBtn.classList.add("d-none");
-  cancelBtn.classList.add("d-none");
-  backBtn.classList.remove("d-none");
-  editBtn.classList.remove("d-none");
+  allBtnHandler();
   prdName.value = productData[0].name;
   description.value = productData[0].desc;
   price.value = productData[0].price;
   imagePreview.src = productData[0].image;
-  heading.innerHTML = "view Product";
+  heading.innerHTML = "View Product";
   productPhoto.value="";
 });
 
@@ -76,22 +66,25 @@ updateBtn.addEventListener("click", (e) => {
     productList[index].desc = description.value;
     productList[index].price = price.value;
     productList[index].image = imgUrl;
-    console.log(updateCheck,productList[index],updateCheck ===productList[index]);
     if(JSON.stringify(updateCheck) !==JSON.stringify(productList[index])){ 
         localStorage.setItem("productList", JSON.stringify(productList));
         swal("Product Details Updated!", "", "success");
         const formFields = document.querySelectorAll("input,textarea");
         for (let field of formFields) field.readOnly = true;
-        photoUpload.classList.add("invisible");
-        cancelBtn.classList.add("d-none");
-        updateBtn.classList.add("d-none");
-        backBtn.classList.remove("d-none");
-        editBtn.classList.remove("d-none");
+        allBtnHandler();
         imagePreview.src = productList[index].image;
         heading.innerHTML = "view Product";
     }
     else{
-      alert("No Update found!");
+      swal("No update found!", "", "warning");
     }
   }
 });
+
+function allBtnHandler(){
+  photoUpload.classList.toggle("invisible");
+  cancelBtn.classList.toggle("d-none");
+  updateBtn.classList.toggle("d-none");
+  backBtn.classList.toggle("d-none");
+  editBtn.classList.toggle("d-none");
+}
