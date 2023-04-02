@@ -1,19 +1,17 @@
+const alertDisplay=document.getElementById("alertDisplay");
 export default function isValid(name, price,photo) {
-  console.log(price);
   if (name == "" || name.trim() == "") {
-    alert("Invalid name");
+    showAlert("please enter name.");
     return false;
   } else if (!name.match(/^[A-Za-z][ A-Za-z0-9_/()-]*$/)) {
-    alert("Name should not contain any such characters");
+    showAlert("Invalid name.");
     return false;
   } else if (price.includes("e")) {
-    alert("please enter valid price");
+    showAlert("please enter valid price");
     return false;
   }else if(!isFileValid(photo)){
-    alert("file invalid");
     return false;
   }
-  console.log("here");
   return true;
 }
 
@@ -27,16 +25,24 @@ function isFileValid(productPhoto) {
   }
   if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
     if (productPhoto.files[0].size > 200000) {
-      alert("File size should be <200KB");
+      showAlert("File should be <200KB");
       productPhoto.value = "";
       imgPreview.src = "./images/img-2.png";
       return false;
     }
   } else {
-    alert("Only jpg/jpeg and png files are allowed!");
+    showAlert("Only jpg/jpeg and png files are allowed!");
     productPhoto.value = "";
     imgPreview.src = "./images/img-2.png";
     return false;
   }
   return true;
+}
+
+function showAlert(msg) {
+  alertDisplay.classList.remove("invisible");
+  alertDisplay.value = " ! " + msg;
+  setTimeout(() => {
+    alertDisplay.classList.add("invisible");
+  }, 1500);
 }
