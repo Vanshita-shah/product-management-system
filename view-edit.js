@@ -1,3 +1,4 @@
+import isValid from "./validation.js";
 const prdName = document.getElementById("productName");
 const description = document.getElementById("productDescription");
 const price = document.getElementById("productPrice");
@@ -17,8 +18,7 @@ if (localStorage.getItem("productList") != null) {
 }
 
 const productID = new URLSearchParams(window.location.search).get("ProductID");
-const products = JSON.parse(localStorage.getItem("productList"));
-const productData = products.filter((product) => {
+const productData = productList.filter((product) => {
   return product.id == productID;
 });
 console.log(productData[0]);
@@ -31,63 +31,67 @@ backBtn.parentElement.href = "./index.html";
 editBtn.addEventListener("click", () => {
   heading.innerHTML = "Update Product";
   const formFields = document.querySelectorAll("input,textarea");
-  for (field of formFields) field.removeAttribute("readonly");
+  for (let field of formFields) field.removeAttribute("readonly");
   photoUpload.classList.remove("invisible");
   updateBtn.classList.remove("d-none");
+  cancelBtn.classList.remove("d-none");
   editBtn.classList.add("d-none");
   backBtn.classList.add("d-none");
-  // backBtn.addEventListener("click", () => {
-  //   backBtn.parentElement.href = "";
-  //   const formFields = document.querySelectorAll("input,textarea");
-  //   for (field of formFields) field.readOnly = true;
-  //   photoUpload.classList.add("invisible");
-  //   updateBtn.classList.add("d-none");
-  //   editBtn.classList.remove("d-none");
-  //   imagePreview.src = productData[0].image;
-  // });
 });
-// cancelBtn.addEventListener("click", () => {
-//   const formFields = document.querySelectorAll("input,textarea");
-//   for (field of formFields) field.readOnly = true;
-//   photoUpload.classList.add("d-none");
-//   updateBtn.classList.add("d-none");
-//   editBtn.classList.remove("d-none");
-//   imagePreview.src = productData[0].image;
-//   backBtn.addEventListener("click", () => {
-//     backBtn.parentElement.href = "./index.html";
-//   });
-// });
+
+cancelBtn.addEventListener("click", () => {
+  const formFields = document.querySelectorAll("input,textarea");
+  for (let field of formFields) field.readOnly = true;
+  photoUpload.classList.add("invisible");
+  updateBtn.classList.add("d-none");
+  cancelBtn.classList.add("d-none");
+  backBtn.classList.remove("d-none");
+  editBtn.classList.remove("d-none");
+  prdName.value = productData[0].name;
+  description.value = productData[0].desc;
+  price.value = productData[0].price;
+  imagePreview.src = productData[0].image;
+  heading.innerHTML = "view Product";
+  productPhoto.value="";
+});
 
 productPhoto.addEventListener("change", (e) => {
-  if (productPhoto.files[0].size < 1000000) {
     let fReader = new FileReader();
     fReader.onload = (e) => {
       imgUrl = e.target.result;
     };
     fReader.readAsDataURL(productPhoto.files[0]);
-  } else {
-    console.log("File size too long");
-  }
   const img = URL.createObjectURL(e.target.files[0]);
   const imgPreview = document.getElementById("imgPreview");
   imgPreview.src = img;
 });
 
 let imgUrl = productData[0].image;
-updateBtn.addEventListener("click", () => {
-  let index = productList.findIndex((product) => product.id == productID);
-  productList[index].name = prdName.value;
-  productList[index].desc = description.value;
-  productList[index].price = price.value;
-  productList[index].image = imgUrl;
-  localStorage.setItem("productList", JSON.stringify(productList));
-  swal("Product Details Updated!", "", "success");
-  const formFields = document.querySelectorAll("input,textarea");
-  for (field of formFields) field.readOnly = true;
-  photoUpload.classList.add("invisible");
-  updateBtn.classList.add("d-none");
-  backBtn.classList.remove("d-none");
-  editBtn.classList.remove("d-none");
-  imagePreview.src = productData[0].image;
-  heading.innerHTML = "view Product";
+updateBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  if(isValid(prdName.value,price.value,productPhoto)){
+    let index = productList.findIndex((product) => product.id == productID);
+    const updateCheck=JSON.parse(JSON.stringify(productList[index]));
+    productList[index].name = prdName.value;
+    productList[index].desc = description.value;
+    productList[index].price = price.value;
+    productList[index].image = imgUrl;
+    console.log(updateCheck,productList[index],updateCheck ===productList[index]);
+    if(JSON.stringify(updateCheck) !==JSON.stringify(productList[index])){ 
+        localStorage.setItem("productList", JSON.stringify(productList));
+        swal("Product Details Updated!", "", "success");
+        const formFields = document.querySelectorAll("input,textarea");
+        for (let field of formFields) field.readOnly = true;
+        photoUpload.classList.add("invisible");
+        cancelBtn.classList.add("d-none");
+        updateBtn.classList.add("d-none");
+        backBtn.classList.remove("d-none");
+        editBtn.classList.remove("d-none");
+        imagePreview.src = productList[index].image;
+        heading.innerHTML = "view Product";
+    }
+    else{
+      alert("No Update found!");
+    }
+  }
 });
